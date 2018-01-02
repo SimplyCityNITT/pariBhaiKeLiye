@@ -17,19 +17,21 @@ import java.util.List;
 
 public class Database extends SQLiteAssetHelper {
 
-    private static final String DB_NAME= "SimplyCityDB.db";
+    private static final String DB_NAME= "food.db";
     private static final int DB_VER=1;
+    Context context;
 
     public Database(Context context)
     {
         super(context, DB_NAME, null, DB_VER);
+        this.context = context;
     }
 
 
     public List<Order> getCarts()
     {
 
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = Database.this.getReadableDatabase();
         SQLiteQueryBuilder qb= new SQLiteQueryBuilder();
 
         String[] sqlSelect = {"ProductName","ProductId","Quantity","Price","Discount"};
@@ -59,9 +61,9 @@ public class Database extends SQLiteAssetHelper {
     }
 
 
-  public void addToCart(Order order)
+  public void addToCart(SQLiteDatabase db,Order order)
   {
-      SQLiteDatabase db= getReadableDatabase();
+      //SQLiteDatabase db= getReadableDatabase();
       String query = String.format("INSERT INTO OrderDetail(ProductId,ProductName,Quantity,Price,Discount) VALUES('%s','%s','%s','%s','%s');",
               order.getProductId(),
               order.getProductName(),
@@ -78,13 +80,6 @@ public class Database extends SQLiteAssetHelper {
     {
         SQLiteDatabase db= getReadableDatabase();
         String query = String.format("DELETE FROM OrderDetail");
-
         db.execSQL(query);
-
     }
-
-
-
-
-
 }

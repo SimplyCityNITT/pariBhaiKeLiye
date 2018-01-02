@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.android.parii.lets_do_it.Common.Common;
 import com.android.parii.lets_do_it.Model.User;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +35,20 @@ public class SignIn extends AppCompatActivity {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference table_user = database.getReference("User");
+
+        //TODO: uncomment this code and import required library. This code maintains the user session
+        final ProgressDialog mDialog = new ProgressDialog(SignIn.this);
+                mDialog.setMessage("Kindly wait for a few moments...");
+                mDialog.show();
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            mDialog.dismiss();
+            Intent homeIntent = new Intent(SignIn.this, Home.class);
+            //Common.currentUser = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+            startActivity(homeIntent);
+            finish();
+        }else{
+            mDialog.dismiss();
+        }
 
         btnSignIn.setOnClickListener(new View.OnClickListener(){
             @Override

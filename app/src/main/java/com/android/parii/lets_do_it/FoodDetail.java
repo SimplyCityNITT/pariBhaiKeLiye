@@ -1,5 +1,6 @@
 package com.android.parii.lets_do_it;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +51,9 @@ public class FoodDetail extends AppCompatActivity {
         database= FirebaseDatabase.getInstance();
         foods = database.getReference("Foods");
 
+        final Database db = new Database(this);
+        final SQLiteDatabase database = db.getReadableDatabase();
+
         //init
         numberButton=(ElegantNumberButton)findViewById(R.id.number_button);
         btnCart=(FloatingActionButton)findViewById(R.id.btnCart);
@@ -59,7 +63,7 @@ public class FoodDetail extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                new Database(getBaseContext()).addToCart(new Order(
+               db.addToCart(database,new Order(
                         foodId,
                         currentFood.getName(),
                         numberButton.getNumber(),
@@ -122,8 +126,6 @@ public class FoodDetail extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
-
 
             }
         });
